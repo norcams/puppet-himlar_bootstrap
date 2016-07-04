@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+# Script to provision <%= @certname %> using virt-install as an
+# libvirt instance on the local host
+#
+# PLEASE REVIEW THE SETTINGS
+#
+cat "$0"
+read -p "Press any key to continue"
+
+#
+# Serve kickstart file
+#
+pgrep -f "python -m SimpleHTTPServer" | xargs --no-run-if-empty kill
+cd /var/www/html && python -m SimpleHTTPServer &
+
+#
+# Run virt-install to build (or rebuild) <loc>-foreman-1
+#
+virsh destroy <%= @name %>
+virsh undefine <%= @name %>
+virsh vol-delete --pool <%= @libvirt_pool %> <%= @name %>.img
+virsh vol-delete --pool <%= @libvirt_pool %> <%= @name %>.qcow2
+virsh pool-refresh --pool <%= @libvirt_pool %>
+virt-install -v \
+  -n <%= @name %> \
+  -r <%= @vm_memory %> \
+  --vcpus <%= @vm_vcpus %> \
+  --autostart \
+  --noautoconsole \
+  --wait=-1 \
+  --graphics vnc,listen=<%= @ipaddress %> \
+  --os-variant=rhel7 \
+  --accelerate \
+  -w network=<%= @libvirt_network %> \
+  --disk pool=<%= @libvirt_pool %>,size=10 --force \
+  -l <%= scope.lookupvar('::himlar_bootstrap::mirror') %> \
+  -x "ks=<%= @ks_url %> network ks.sendmac net.ifnames=0 \
+<% if @install_ip %>     ip=<%= @install_ip %> \
+     netmask=<%= @install_netmask %> \
+     gateway=<%= @install_gateway %> \
+     dns=<%= scope.lookupvar('::himlar_bootstrap::nameserver') %> \<% end %>
+<% if @vm_console %>     console=ttyS0,115200 \ <% end %>
+     " &

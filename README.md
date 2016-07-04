@@ -1,2 +1,2 @@
 # puppet-himlar_bootstrap
-Bootstrap norcams/himlar
+Puppet module to bootstrap https://github.com/norcams/himlar

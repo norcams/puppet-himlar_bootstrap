@@ -1,7 +1,7 @@
 #
 # Creates bootstrap instances from hiera data
 #
-class himlar_bootstrap::instances {
+class himlar_bootstrap::instances() {
   $virt_install = hiera_hash('himlar_bootstrap::virt_install', undef)
   $tftp_install = hiera_hash('himlar_bootstrap::tftp_install', undef)
 

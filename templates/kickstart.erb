@@ -108,10 +108,6 @@ fi
 # **** Disable NetworkManager on el7
 /usr/bin/systemctl disable NetworkManager.service
 
-
-# update all the base packages from the updates repository
-yum -t -y -e 0 update
-
 echo "Running Puppet bootstrap"
 yum -y install git
 git clone <%= scope.lookupvar('::himlar_bootstrap::puppetrepo') %> /opt/himlar
@@ -119,8 +115,11 @@ git clone <%= scope.lookupvar('::himlar_bootstrap::puppetrepo') %> /opt/himlar
 /opt/himlar/provision/puppetmodules.sh
 FACTER_RUNMODE=kickstart HIMLAR_CERTNAME=<%= @certname %> /opt/himlar/provision/puppetrun.sh
 echo "FACTER_RUNMODE=bootstrap HIMLAR_CERTNAME=<%= @certname %> /opt/himlar/provision/puppetrun.sh" > /root/puppet_bootstrap.sh
-
+chmod 755 /root/puppet_bootstrap.sh
 sync
+
+# update all the base packages from the updates repository
+yum -t -y -e 0 update
 
 # Sleeping an hour for debug
 ) 2>&1 | tee /root/install.post.log

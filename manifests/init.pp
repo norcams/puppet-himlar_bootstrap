@@ -5,7 +5,8 @@ class himlar_bootstrap(
   $keyboard   = $::himlar_bootstrap::params::keyboard,
   $rootpw     = $::himlar_bootstrap::params::rootpw,
   $nameserver = $::himlar_bootstrap::params::nameserver,
-  $puppetrepo = $::himlar_bootstrap::params::puppetrepo
+  $puppetrepo = $::himlar_bootstrap::params::puppetrepo,
+  $yumrepo    = $::himlar_bootstrap::params::puppetrepo
 ) inherits himlar_bootstrap::params {
 
   File {

@@ -15,9 +15,9 @@ timezone --utc <%= scope.lookupvar('::himlar_bootstrap::timezone') %>
 services --disabled gpm,sendmail,cups,pcmcia,isdn,rawdevices,hpoj,bluetooth,openibd,avahi-daemon,avahi-dnsconfd,hidd,hplip,pcscd
 
 
-repo --name="EPEL" --mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=x86_64
-repo --name=puppetlabs-products --baseurl=http://yum.puppetlabs.com/el/7/products/x86_64
-repo --name=puppetlabs-deps --baseurl=http://yum.puppetlabs.com/el/7/dependencies/x86_64
+repo --name="epel" --baseurl=<%= scope.lookupvar('::himlar_bootstrap::yumrepo') %>/epel
+repo --name=puppetlabs-products --baseurl=<%= scope.lookupvar('::himlar_bootstrap::yumrepo') %>/puppetlabs
+repo --name=puppetlabs-deps --baseurl=<%= scope.lookupvar('::himlar_bootstrap::yumrepo') %>/puppetlabs-deps
 
 bootloader --location=mbr --append="nofb quiet splash=quiet"
 

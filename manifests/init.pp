@@ -6,7 +6,7 @@ class himlar_bootstrap(
   $rootpw     = $::himlar_bootstrap::params::rootpw,
   $nameserver = $::himlar_bootstrap::params::nameserver,
   $puppetrepo = $::himlar_bootstrap::params::puppetrepo,
-  $yumrepo    = $::himlar_bootstrap::params::puppetrepo
+  $yumrepo    = $::himlar_bootstrap::params::yumrepo
 ) inherits himlar_bootstrap::params {
 
   File {

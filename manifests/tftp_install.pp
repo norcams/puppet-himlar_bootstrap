@@ -15,10 +15,19 @@ define himlar_bootstrap::tftp_install (
 
   $pxelinux_i = regsubst($macaddress,':','-','G')
   $pxelinux_file = downcase($pxelinux_i)
-  file { "/var/lib/tftpboot/pxelinux.cfg/${pxelinux_file}":
-    ensure  => $ensure,
-    content => template("${module_name}/pxelinux.erb"),
-  }
+
+  if $macaddress != 'default' {
+    file { "/var/lib/tftpboot/pxelinux.cfg/01-${pxelinux_file}":
+      ensure  => $ensure,
+      content => template("${module_name}/pxelinux.erb"),
+    }
+  } 
+  else {
+    file { "/var/lib/tftpboot/pxelinux.cfg/${pxelinux_file}":
+      ensure  => $ensure,
+      content => template("${module_name}/pxelinux.erb"),
+    }
+  }  
 
   file { "/var/www/html/${name}.cfg":
     ensure  => $ensure,

@@ -21,8 +21,7 @@ define himlar_bootstrap::tftp_install (
       ensure  => $ensure,
       content => template("${module_name}/pxelinux.erb"),
     }
-  } 
-  else {
+  } else {
     file { "/var/lib/tftpboot/pxelinux.cfg/${pxelinux_file}":
       ensure  => $ensure,
       content => template("${module_name}/pxelinux.erb"),

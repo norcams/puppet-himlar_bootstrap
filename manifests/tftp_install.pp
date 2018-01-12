@@ -10,6 +10,7 @@ define himlar_bootstrap::tftp_install (
   $dhcp_range_start = '10.0.0.10',
   $dhcp_range_end   = '10.0.0.10',
   $dhcp_gateway     = '10.0.0.1',
+  $use_dhcp         = true
 ) {
   require himlar_bootstrap::tftp_setup
 

@@ -12,7 +12,8 @@ define himlar_bootstrap::virt_install(
   $install_gateway    = undef,
   $vm_vcpus           = 2,
   $vm_memory          = 4096,
-  $vm_console         = 'ttyS0,115200'
+  $vm_console         = 'ttyS0,115200',
+  $use_dhcp           = true
 ) {
   require himlar_bootstrap::virt_install_setup
 

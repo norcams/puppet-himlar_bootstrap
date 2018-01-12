@@ -7,7 +7,11 @@ lang en_US.UTF-8
 selinux --permissive
 keyboard <%= scope.lookupvar('::himlar_bootstrap::keyboard') %>
 skipx
+<% if @use_dhcp -%>
 network --bootproto dhcp --hostname <%= @hostname %>
+<% else -%>
+network --hostname <%= @hostname %>
+<% end -%>
 rootpw --iscrypted <%= scope.lookupvar('::himlar_bootstrap::rootpw') %>
 firewall --service=ssh
 authconfig --useshadow --passalgo=sha256 --kickstart

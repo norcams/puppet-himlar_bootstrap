@@ -20,8 +20,7 @@ services --disabled gpm,sendmail,cups,pcmcia,isdn,rawdevices,hpoj,bluetooth,open
 
 
 repo --name="epel" --baseurl=<%= scope.lookupvar('::himlar_bootstrap::yumrepo') %>/epel
-repo --name=puppetlabs-products --baseurl=<%= scope.lookupvar('::himlar_bootstrap::yumrepo') %>/puppetlabs
-repo --name=puppetlabs-deps --baseurl=<%= scope.lookupvar('::himlar_bootstrap::yumrepo') %>/puppetlabs-deps
+repo --name=puppetlabs-products --baseurl=<%= scope.lookupvar('::himlar_bootstrap::yumrepo') %>/puppetlabs-PC1
 
 bootloader --location=mbr --append="nofb quiet splash=quiet"
 
@@ -45,8 +44,7 @@ wget
 @Core
 epel-release
 
-puppet
-puppetlabs-release
+puppet-agent
 %end
 
 %post --nochroot

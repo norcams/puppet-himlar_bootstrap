@@ -14,6 +14,9 @@ read -p "Press any key to continue"
 pgrep -f "python -m SimpleHTTPServer" | xargs --no-run-if-empty kill
 cd /var/www/html && python -m SimpleHTTPServer &
 
+# Give some time to the python http server to start
+/bin/sleep 10
+
 #
 # Run virt-install to build (or rebuild) <loc>-foreman-1
 #

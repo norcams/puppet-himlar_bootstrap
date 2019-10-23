@@ -117,7 +117,7 @@ git clone <%= scope.lookupvar('::himlar_bootstrap::puppetrepo') %> /opt/himlar
 /opt/himlar/provision/puppetbootstrap.sh
 HIMLAR_PUPPETFILE=deploy /opt/himlar/provision/puppetmodules.sh
 FACTER_RUNMODE=kickstart HIMLAR_CERTNAME=<%= @certname %> /opt/himlar/provision/puppetrun.sh
-echo "FACTER_RUNMODE=bootstrap HIMLAR_CERTNAME=<%= @certname %> /opt/himlar/provision/puppetrun.sh" > /root/puppet_bootstrap.sh
+echo "HIMLAR_PUPPETFILE=deploy /opt/himlar/provision/puppetmodules.sh && FACTER_RUNMODE=bootstrap HIMLAR_CERTNAME=<%= @certname %> /opt/himlar/provision/puppetrun.sh" > /root/puppet_bootstrap.sh
 chmod 755 /root/puppet_bootstrap.sh
 sync
 

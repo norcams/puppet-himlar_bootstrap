@@ -36,7 +36,7 @@ virt-install -v \
   --os-variant=rhel7 \
   --accelerate \
   -w network=<%= @libvirt_network %> \
-  --disk pool=<%= @libvirt_pool %>,size=10 --force \
+  --disk pool=<%= @libvirt_pool %>,size=<%= @root_size %> --force \
   -l <%= scope.lookupvar('::himlar_bootstrap::mirror') %> \
   -x "ks=<%= @ks_url %> network ks.sendmac net.ifnames=0 \
 <% if @install_ip %>     ip=<%= @install_ip %> \

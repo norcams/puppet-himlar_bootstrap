@@ -5,7 +5,6 @@ define himlar_bootstrap::tftp_install (
   $certname         = "${name}.${domain}",
   $hostname         = "${name}.${domain}",
   $macaddress       = 'default',
-  $ks_url           = "http://${::ipaddress}:8000/${name}.cfg",
   $dhcp_interface   = 'eth1',
   $dhcp_range_start = '10.0.0.10',
   $dhcp_range_end   = '10.0.0.10',
@@ -13,6 +12,9 @@ define himlar_bootstrap::tftp_install (
   $use_dhcp         = true
 ) {
   require himlar_bootstrap::tftp_setup
+
+  $dhcp_interface_ip = inline_template("<%= scope.lookupvar('::ipaddress_${dhcp_interface}') %>")
+  $ks_url = "http://${dhcp_interface_ip}:8000/${name}.cfg"
 
   if $macaddress == 'default' {
     file { "/var/lib/tftpboot/pxelinux.cfg/default":

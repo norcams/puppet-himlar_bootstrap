@@ -5,6 +5,7 @@ define himlar_bootstrap::tftp_install (
   $certname         = "${name}.${domain}",
   $hostname         = "${name}.${domain}",
   $macaddress       = 'default',
+  $kernel_opts      = "network net.ifnames=0",
   $dhcp_interface   = 'eth1',
   $dhcp_range_start = '10.0.0.10',
   $dhcp_range_end   = '10.0.0.10',

@@ -29,8 +29,8 @@ curl -f -L -C - -o /var/lib/tftpboot/boot/vmlinuz \
 #
 # Serve kickstart file
 #
-pgrep -f "python -m SimpleHTTPServer" | xargs --no-run-if-empty kill
-cd /var/www/html && python -m SimpleHTTPServer &
+pgrep -f "python3 -m http.server" | xargs --no-run-if-empty kill
+cd /var/www/html && python3 -m http.server 8000 --bind <%= @dhcp_interface_ip %> &
 
 #
 # Start dnsmasq to provide DHCP and tftp

@@ -5,7 +5,7 @@ define himlar_bootstrap::tftp_install (
   $certname         = "${name}.${domain}",
   $hostname         = "${name}.${domain}",
   $macaddress       = 'default',
-  $ks_url           = "http://${::ipaddress}:8000/${name}.cfg",
+  $kernel_opts      = "network net.ifnames=0",
   $dhcp_interface   = 'eth1',
   $dhcp_range_start = '10.0.0.10',
   $dhcp_range_end   = '10.0.0.10',
@@ -14,10 +14,18 @@ define himlar_bootstrap::tftp_install (
 ) {
   require himlar_bootstrap::tftp_setup
 
-  $pxelinux_i = regsubst($macaddress,':','-','G')
-  $pxelinux_file = downcase($pxelinux_i)
+  $dhcp_interface_ip = inline_template("<%= scope.lookupvar('::ipaddress_${dhcp_interface}') %>")
+  $ks_url = "http://${dhcp_interface_ip}:8000/${name}.cfg"
 
-  unless $macaddress == 'default' {
+  if $macaddress == 'default' {
+    file { "/var/lib/tftpboot/pxelinux.cfg/default":
+      ensure  => $ensure,
+      content => template("${module_name}/pxelinux.erb"),
+    }
+  } else {
+    $pxelinux_i = regsubst($macaddress,':','-','G')
+    $pxelinux_file = downcase($pxelinux_i)
+
     file { "/var/lib/tftpboot/pxelinux.cfg/01-${pxelinux_file}":
       ensure  => $ensure,
       content => template("${module_name}/pxelinux.erb"),

@@ -20,7 +20,7 @@ services --disabled gpm,sendmail,cups,pcmcia,isdn,rawdevices,hpoj,bluetooth,open
 
 
 repo --name="epel" --baseurl=<%= scope.lookupvar('::himlar_bootstrap::yumrepo') %>/epel
-repo --name=puppetlabs-products --baseurl=<%= scope.lookupvar('::himlar_bootstrap::yumrepo') %>/puppetlabs5
+repo --name=puppetlabs-products --baseurl=<%= scope.lookupvar('::himlar_bootstrap::yumrepo') %>/puppetlabs6
 
 bootloader --location=mbr --append="nofb quiet splash=quiet"
 
@@ -37,7 +37,7 @@ text
 reboot
 
 %packages
-yum
+dnf
 dhclient
 ntp
 wget
@@ -73,8 +73,6 @@ echo "updating system time"
 # **** Disable the new naming scheme for network interfaces and enable ethX scheme
 # **** when BIOSDEVNAME scheme is not available
 
-# Override udev net-rules on el7
-mkdir -p /etc/udev/rules.d/60-net.rules
 # Add "net.ifnames=0"
 /usr/bin/sed -i -e 's/quiet/net.ifnames=0 quiet/' /etc/default/grub
 /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg

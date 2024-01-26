@@ -58,10 +58,9 @@ exec < /dev/tty3 > /dev/tty3
 (
 #update local time
 echo "updating system time"
-/usr/bin/systemctl stop chronyd.service
-/sbin/chronyd -q 'server 0.europe.pool.ntp.org iburst'
-/sbin/hwclock --systohc
-
+systemctl enable --now chronyd.service
+/usr/bin/chronyc -a makestep
+/usr/sbin/hwclock --systohc
 
 <% if @kernel_opts =~ /.*net\.ifnames=0.*/ -%>
 # Add "net.ifnames=0"
@@ -112,9 +111,9 @@ dnf -y install git-core
 git clone <%= scope.lookupvar('::himlar_bootstrap::puppetrepo') %> /opt/himlar
 /opt/himlar/provision/puppetbootstrap.sh
 HIMLAR_PUPPETFILE=deploy /opt/himlar/provision/puppetmodules.sh
-FACTER_RUNMODE=kickstart HIMLAR_CERTNAME=<%= @certname %> /opt/himlar/provision/puppetrun.sh
-echo "HIMLAR_PUPPETFILE=deploy /opt/himlar/provision/puppetmodules.sh && FACTER_RUNMODE=bootstrap HIMLAR_CERTNAME=<%= @certname %> /opt/himlar/provision/puppetrun.sh" > /root/puppet_bootstrap.sh
-chmod 755 /root/puppet_bootstrap.sh
+# export a custom fact called 'is_installer' to allow detection of the installer environment in Puppet modules
+export FACTER_is_installer=true
+HIMLAR_CERTNAME=<%= @certname %> /opt/himlar/provision/puppetrun.sh
 sync
 
 # update all the base packages from the updates repository

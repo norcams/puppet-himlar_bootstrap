@@ -13,7 +13,7 @@ network --hostname <%= @hostname %>
 <% end -%>
 rootpw --iscrypted <%= scope.lookupvar('::himlar_bootstrap::rootpw') %>
 firewall --service=ssh
-authconfig --useshadow --passalgo=sha256 --kickstart
+authselect --useshadow --passalgo=sha256 --kickstart
 timezone --utc <%= scope.lookupvar('::himlar_bootstrap::timezone') %>
 services --disabled gpm,sendmail,cups,pcmcia,isdn,rawdevices,hpoj,bluetooth,openibd,avahi-daemon,avahi-dnsconfd,hidd,hplip,pcscd
 
@@ -39,7 +39,6 @@ dnf
 dhclient
 chrony
 -ntp
--authselect-compat
 pciutils
 net-tools
 @Core

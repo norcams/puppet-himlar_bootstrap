@@ -17,7 +17,6 @@ authconfig --useshadow --passalgo=sha256 --kickstart
 timezone --utc <%= scope.lookupvar('::himlar_bootstrap::timezone') %>
 services --disabled gpm,sendmail,cups,pcmcia,isdn,rawdevices,hpoj,bluetooth,openibd,avahi-daemon,avahi-dnsconfd,hidd,hplip,pcscd
 
-
 repo --name="epel" --baseurl=<%= scope.lookupvar('::himlar_bootstrap::yumrepo') %>/epel
 repo --name=puppetlabs-products --baseurl=<%= scope.lookupvar('::himlar_bootstrap::yumrepo') %>/puppetlabs6
 
@@ -38,11 +37,10 @@ reboot
 %packages
 dnf
 dhclient
-ntp
-wget
+chrony
+-ntp
 pciutils
 net-tools
-bridge-utils
 @Core
 
 puppet-agent
@@ -65,16 +63,16 @@ exec < /dev/tty3 > /dev/tty3
 (
 #update local time
 echo "updating system time"
-/usr/sbin/ntpdate -sub 0.fedora.pool.ntp.org
-/usr/sbin/hwclock --systohc
+/sbin/chronyd -q 'server 0.europe.pool.ntp.org iburst'
+/sbin/hwclock --systohc
 
 <% if @kernel_opts =~ /.*net\.ifnames=0.*/ -%>
-# **** Disable the new naming scheme for network interfaces and enable ethX scheme
-# **** when BIOSDEVNAME scheme is not available
-
 # Add "net.ifnames=0"
 /usr/bin/sed -i -e 's/quiet/net.ifnames=0 quiet/' /etc/default/grub
 /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
+<% else -%>
+# Override udev net-rules on el7 and greater if ifnames not set
+mkdir -p /etc/udev/rules.d/60-net.rules
 <% end -%>
 
 # **** Configure additional network interfaces as defined in "enable-addifs" parameter
@@ -108,11 +106,11 @@ HWADDR=\"$ifhwaddr\"" > /etc/sysconfig/network-scripts/ifcfg-$ifdevice
     /sbin/ifup $ifdevice
 fi
 
-# **** Disable NetworkManager on el7
+# **** Disable NetworkManager
 /usr/bin/systemctl disable NetworkManager.service
 
 echo "Running Puppet bootstrap"
-yum -y install git
+dnf -y install git-core
 git clone <%= scope.lookupvar('::himlar_bootstrap::puppetrepo') %> /opt/himlar
 /opt/himlar/provision/puppetbootstrap.sh
 HIMLAR_PUPPETFILE=deploy /opt/himlar/provision/puppetmodules.sh
@@ -122,7 +120,7 @@ chmod 755 /root/puppet_bootstrap.sh
 sync
 
 # update all the base packages from the updates repository
-yum -t -y -e 0 update
+dnf -t -y -e 0 update
 
 # Sleeping an hour for debug
 ) 2>&1 | tee /root/install.post.log

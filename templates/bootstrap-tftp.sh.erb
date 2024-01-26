@@ -12,9 +12,7 @@ read -p "Press any key to continue"
 #
 # Prepare pxelinux files for tftpboot
 #
-cp -f /usr/share/syslinux/memdisk \
- /usr/share/syslinux/menu.c32 \
- /usr/share/syslinux/chain.c32 \
+cp -f /usr/share/syslinux/ldlinux.c32 \
  /usr/share/syslinux/pxelinux.0 \
  /var/lib/tftpboot
 

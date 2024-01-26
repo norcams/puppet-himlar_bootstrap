@@ -37,6 +37,7 @@ chrony
 pciutils
 net-tools
 network-scripts
+git-core
 @Core
 %end
 
@@ -106,7 +107,6 @@ fi
 /usr/bin/systemctl enable network.service
 
 echo "Running Puppet bootstrap"
-dnf -y install git-core
 git clone <%= scope.lookupvar('::himlar_bootstrap::puppetrepo') %> /opt/himlar
 /opt/himlar/provision/puppetbootstrap.sh
 HIMLAR_PUPPETFILE=deploy /opt/himlar/provision/puppetmodules.sh

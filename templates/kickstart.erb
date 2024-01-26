@@ -1,5 +1,3 @@
-
-
 install
 url --url <%= scope.lookupvar('::himlar_bootstrap::mirror') %>
 lang en_US.UTF-8
@@ -16,9 +14,7 @@ firewall --service=ssh
 authselect --useshadow --passalgo=sha256 --kickstart
 timezone --utc <%= scope.lookupvar('::himlar_bootstrap::timezone') %>
 services --disabled gpm,sendmail,cups,pcmcia,isdn,rawdevices,hpoj,bluetooth,openibd,avahi-daemon,avahi-dnsconfd,hidd,hplip,pcscd
-
 repo --name="epel" --baseurl=<%= scope.lookupvar('::himlar_bootstrap::yumrepo') %>/epel
-repo --name=puppetlabs-products --baseurl=<%= scope.lookupvar('::himlar_bootstrap::yumrepo') %>/puppetlabs6
 
 bootloader --location=mbr --append="nofb quiet splash=quiet"
 
@@ -41,9 +37,8 @@ chrony
 -ntp
 pciutils
 net-tools
+network-scripts
 @Core
-
-puppet-agent
 %end
 
 %post --nochroot
@@ -106,8 +101,9 @@ HWADDR=\"$ifhwaddr\"" > /etc/sysconfig/network-scripts/ifcfg-$ifdevice
     /sbin/ifup $ifdevice
 fi
 
-# **** Disable NetworkManager
+# **** Disable NetworkManager and use network script for el8
 /usr/bin/systemctl disable NetworkManager.service
+/usr/bin/systemctl enable network.service
 
 echo "Running Puppet bootstrap"
 dnf -y install git-core
@@ -120,7 +116,7 @@ chmod 755 /root/puppet_bootstrap.sh
 sync
 
 # update all the base packages from the updates repository
-dnf -t -y -e 0 update
+dnf --refresh -y -e 0 update
 
 # Sleeping an hour for debug
 ) 2>&1 | tee /root/install.post.log

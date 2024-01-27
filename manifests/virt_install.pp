@@ -10,6 +10,7 @@ define himlar_bootstrap::virt_install(
   $install_ip         = undef,
   $install_netmask    = undef,
   $install_gateway    = undef,
+  $os_variant         = 'almalinux8',
   $vm_vcpus           = 2,
   $vm_memory          = 4096,
   $vm_console         = 'ttyS0,115200',

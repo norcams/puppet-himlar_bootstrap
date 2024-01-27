@@ -18,7 +18,7 @@ cd /var/www/html && python -m SimpleHTTPServer &
 /bin/sleep 10
 
 #
-# Run virt-install to build (or rebuild) <loc>-admin-01
+# Run virt-install to build (or rebuild) <%= @name %>
 #
 virsh destroy <%= @name %>
 virsh undefine <%= @name %>
@@ -33,7 +33,7 @@ virt-install -v \
   --noautoconsole \
   --wait=-1 \
   --graphics vnc,listen=<%= @ipaddress %> \
-  --os-variant=almalinux8 \
+  --os-variant=<%= @os_variant %> \
   --accelerate \
   -w network=<%= @libvirt_network %> \
   --disk pool=<%= @libvirt_pool %>,size=<%= @root_size %> --force \

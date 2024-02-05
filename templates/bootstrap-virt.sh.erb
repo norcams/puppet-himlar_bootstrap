@@ -11,8 +11,8 @@ read -p "Press any key to continue"
 #
 # Serve kickstart file
 #
-pgrep -f "python -m SimpleHTTPServer" | xargs --no-run-if-empty kill
-cd /var/www/html && python -m SimpleHTTPServer &
+pgrep -f "python3 -m http.server" | xargs --no-run-if-empty kill
+cd /var/www/html && python3 -m http.server &
 
 # Give some time to the python http server to start
 /bin/sleep 10

@@ -112,6 +112,9 @@ git clone <%= scope.lookupvar('::himlar_bootstrap::puppetrepo') %> /opt/himlar
 HIMLAR_PUPPETFILE=deploy /opt/himlar/provision/puppetmodules.sh
 # export a custom fact called 'is_installer' to allow detection of the installer environment in Puppet modules
 export FACTER_is_installer=true
+if [[ "<=% @certname %>" == *"admin"* ]]; then
+export HIMLAR_PUPPET_ENV=admin
+fi
 HIMLAR_CERTNAME=<%= @certname %> /opt/himlar/provision/puppetrun.sh
 sync
 

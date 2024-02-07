@@ -38,10 +38,8 @@ virt-install -v \
   -w network=<%= @libvirt_network %> \
   --disk pool=<%= @libvirt_pool %>,size=<%= @root_size %> --force \
   -l <%= scope.lookupvar('::himlar_bootstrap::mirror') %> \
-  -x "ks=<%= @ks_url %> network ks.sendmac net.ifnames=0 \
-<% if @install_ip %>     ip=<%= @install_ip %> \
-     netmask=<%= @install_netmask %> \
-     gateway=<%= @install_gateway %> \
-     dns=<%= scope.lookupvar('::himlar_bootstrap::nameserver') %> \<% end %>
+  -x "inst.ks=<%= @ks_url %> network inst.ks.sendmac net.ifnames=0 \
+<% if @install_ip %>ip=<%= @install_ip %>::<%= @install_gateway %>::<%= @install_netmask %> \
+     nameserver=<%= scope.lookupvar('::himlar_bootstrap::nameserver') %> \<% end %>
 <% if @vm_console %>     console=ttyS0,115200 \ <% end %>
      " &

@@ -109,9 +109,9 @@ echo "Running Puppet bootstrap"
 dnf -y install git-core
 git clone <%= scope.lookupvar('::himlar_bootstrap::puppetrepo') %> /opt/himlar
 /opt/himlar/provision/puppetbootstrap.sh
-if [[ "<=% @certname %>" == *"admin"* ]]; then
+<% if @certname.include? "admin" -%>
 export HIMLAR_PUPPET_ENV=admin
-fi
+<% end -%>
 HIMLAR_PUPPETFILE=deploy /opt/himlar/provision/puppetmodules.sh
 # export a custom fact called 'is_installer' to allow detection of the installer environment in Puppet modules
 export FACTER_is_installer=true
